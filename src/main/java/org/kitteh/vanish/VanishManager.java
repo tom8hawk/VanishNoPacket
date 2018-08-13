@@ -54,7 +54,7 @@ public final class VanishManager {
                 final Player player = entry.getPlayer();
                 final Player target = entry.getTarget();
                 if ((player != null) && player.isOnline() && (target != null) && target.isOnline()) {
-                    player.showPlayer(target);
+                    player.showPlayer(plugin, target);
                 }
             }
             this.next.clear();
@@ -154,9 +154,6 @@ public final class VanishManager {
         this.resetSleepingIgnored(player);
         VanishPerms.userQuit(player);
         this.removeVanished(player.getName());
-        for (Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            otherPlayer.showPlayer(player);
-        }
     }
 
     /**
@@ -245,7 +242,7 @@ public final class VanishManager {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
                     if ((entity != null) && (entity instanceof Creature)) {
                         final Creature creature = ((Creature) entity);
-                        if ((creature != null) && (creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
+                        if ((creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
                     }
@@ -280,7 +277,7 @@ public final class VanishManager {
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
-        vanishingPlayer.sendPluginMessage(this.plugin, VanishManager.VANISH_PLUGIN_CHANNEL, vanishing ? new byte[]{0x01} : new byte[]{0x00});
+        vanishingPlayer.sendPluginMessage(this.plugin, VanishManager.VANISH_PLUGIN_CHANNEL, vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
         final java.util.Collection<? extends Player> playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
@@ -291,15 +288,15 @@ public final class VanishManager {
                 if (!VanishPerms.canSeeAll(otherPlayer)) {
                     if (otherPlayer.canSee(vanishingPlayer)) {
                         Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
-                        otherPlayer.hidePlayer(vanishingPlayer);
+                        otherPlayer.hidePlayer(plugin, vanishingPlayer);
                     }
                 } else {
-                    otherPlayer.hidePlayer(vanishingPlayer);
+                    otherPlayer.hidePlayer(plugin, vanishingPlayer);
                     this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 }
             } else {
                 if (VanishPerms.canSeeAll(otherPlayer)) {
-                    otherPlayer.hidePlayer(vanishingPlayer);
+                    otherPlayer.hidePlayer(plugin, vanishingPlayer);
                 }
                 if (!otherPlayer.canSee(vanishingPlayer)) {
                     Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
@@ -413,7 +410,7 @@ public final class VanishManager {
     private void hideVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (!player.equals(otherPlayer) && this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
-                player.hidePlayer(otherPlayer);
+                player.hidePlayer(plugin, otherPlayer);
             }
         }
     }
@@ -434,7 +431,7 @@ public final class VanishManager {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    player.showPlayer(player2);
+                    player.showPlayer(plugin, player2);
                 }
             }
         }
