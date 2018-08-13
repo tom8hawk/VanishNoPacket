@@ -73,12 +73,8 @@
       <url>http://repo.mikeprimm.com/</url>
     </repository>
     <repository>
-      <id>kitteh-repo</id>
-      <url>http://repo.kitteh.org/content/groups/public</url>
-    </repository>
-    <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public</url>
+      <id>vault-repo</id>
+      <url>http://nexus.hc.to/content/repositories/pub_releases</url>
     </repository>
   </repositories>
 
@@ -91,39 +87,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib-API</artifactId>
-      <version>4.4.0-SNAPSHOT</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.getspout</groupId>
-      <artifactId>spoutplugin</artifactId>
-      <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>us.dynmap</groupId>
       <artifactId>DynmapCoreAPI</artifactId>
       <version>3.0-SNAPSHOT</version>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>de.bananaco</groupId>
-      <artifactId>bPermissions</artifactId>
-      <version>v2.12-DEV</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>craftbukkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.ess3</groupId>
@@ -132,59 +99,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>uk.org.whoami</groupId>
-      <artifactId>GeoIPTools</artifactId>
-      <version>1.0</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
-      <artifactId>JSONAPI</artifactId>
-      <version>bleeding</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>tagapi</artifactId>
-      <version>3.0</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pgDev</groupId>
-      <artifactId>disguisecraft</artifactId>
-      <version>2.8-SNAPSHOT</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>craftbukkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>lishid</groupId>
-          <artifactId>orebfuscator</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.getspout</groupId>
-          <artifactId>spoutplugin</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.2.32</version>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.6</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -219,7 +136,6 @@
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
-          <include>spoutcraft.yml</include>
         </includes>
       </resource>
       <resource>
