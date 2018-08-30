@@ -1,15 +1,22 @@
 package org.kitteh.vanish;
 
 import com.google.common.collect.ImmutableSet;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 
 import java.util.Collections;
@@ -273,6 +280,12 @@ public final class VanishManager {
                 this.effectBats(oneUp);
             }
         }
+        if (Settings.getSoundOnVanish()) {
+            vanishingPlayer.playSound(vanishingPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5.0F, 5.0F);
+        }
+        if(Settings.getVanishedActionBarMessage() != null && !Settings.getVanishedActionBarMessage().isEmpty()) {
+            showVanishedActionBar(vanishingPlayer);
+        }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         vanishingPlayer.sendPluginMessage(this.plugin, VanishManager.VANISH_PLUGIN_CHANNEL, vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
         final java.util.Collection<? extends Player> playerList = this.plugin.getServer().getOnlinePlayers();
@@ -300,6 +313,20 @@ public final class VanishManager {
                     this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 }
             }
+        }
+    }
+
+    private void showVanishedActionBar(Player vanishingPlayer) {
+        if (Bukkit.getPlayer(vanishingPlayer.getUniqueId()) != null && isVanished(vanishingPlayer)) {
+            vanishingPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Settings.getVanishedActionBarMessage()));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    showVanishedActionBar(vanishingPlayer);
+                }
+            }.runTaskLater(plugin, 20);
+        } else {
+            vanishingPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
         }
     }
 
