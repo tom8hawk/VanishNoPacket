@@ -25,7 +25,7 @@ colornametags: true
 
 permtest: false
 debug: false
-soundonvanish: true
+soundOnVanish: true
 vanishedactionbarmessage: '&&3&&lYou are vanished!'
 configVersionDoNotTouch: 
     SeriouslyThisWillEraseYourConfig: 5
