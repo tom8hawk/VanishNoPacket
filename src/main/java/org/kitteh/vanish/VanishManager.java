@@ -279,9 +279,9 @@ public final class VanishManager {
             if (VanishPerms.canEffectBats(vanishingPlayer)) {
                 this.effectBats(oneUp);
             }
-        }
-        if (Settings.getSoundOnVanish()) {
-            vanishingPlayer.playSound(vanishingPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5.0F, 5.0F);
+            if (Settings.getSoundOnVanish()) {
+                vanishingPlayer.playSound(vanishingPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5.0F, 5.0F);
+            }
         }
         if(Settings.getVanishedActionBarMessage() != null && !Settings.getVanishedActionBarMessage().isEmpty()) {
             showVanishedActionBar(vanishingPlayer);
