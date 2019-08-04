@@ -51,9 +51,5 @@ public final class ListenPlayerJoin implements Listener {
         if (statusUpdate.length() != 0) {
             this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
         }
-        if (VanishPerms.canReceiveAdminAlerts(event.getPlayer()) && this.plugin.versionDifference()) {
-            event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.getCurrentVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.getLatestKnownVersion());
-            event.getPlayer().sendMessage(ChatColor.AQUA + "Visit " + ChatColor.DARK_AQUA + "http://www.curse.com/server-mods/minecraft/vanish");
-        }
     }
 }

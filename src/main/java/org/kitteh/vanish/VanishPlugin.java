@@ -21,8 +21,6 @@ import java.util.HashSet;
 public final class VanishPlugin extends JavaPlugin {
 
     private final HashSet<String> haveInventoriesOpen = new HashSet<String>();
-    private String latestVersion = null;
-    private boolean versionDiff = false;
     private VanishManager manager;
     private final HookManager hookManager = new HookManager(this);
 
@@ -76,16 +74,6 @@ public final class VanishPlugin extends JavaPlugin {
      */
     public HookManager getHookManager() {
         return this.hookManager;
-    }
-
-    /**
-     * Gets the latest found version
-     * Will show this version, if update checks are disabled
-     *
-     * @return the latest found version of VanishNoPacket
-     */
-    public String getLatestKnownVersion() {
-        return this.latestVersion;
     }
 
     /**
@@ -225,16 +213,6 @@ public final class VanishPlugin extends JavaPlugin {
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this);
-    }
-
-    /**
-     * Gets if there is a difference in versions between this and latest
-     * Will always be false if update checks are disabled
-     *
-     * @return whether or not there's a new version available
-     */
-    public boolean versionDifference() {
-        return this.versionDiff;
     }
 
     @SuppressWarnings("deprecation")
