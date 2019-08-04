@@ -148,6 +148,7 @@ public final class ListenPlayerOther implements Listener {
             event.setQuitMessage(null);
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
+        player.removeMetadata("vanished", this.plugin);
     }
 
     @EventHandler(ignoreCancelled = true)
