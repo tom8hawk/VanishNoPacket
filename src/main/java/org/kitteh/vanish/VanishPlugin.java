@@ -151,7 +151,6 @@ public final class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.setInstance(null);
         Debuggle.nah();
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
@@ -167,8 +166,6 @@ public final class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.setInstance(this);
-
         final File check = new File(this.getDataFolder(), "config.yml");
         if (!check.exists()) {
             this.saveDefaultConfig();
@@ -213,10 +210,5 @@ public final class VanishPlugin extends JavaPlugin {
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setInstance(VanishPlugin plugin) {
-        org.kitteh.vanish.staticaccess.VanishNoPacket.setInstance(plugin);
     }
 }
