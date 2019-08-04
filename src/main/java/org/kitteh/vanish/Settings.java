@@ -13,7 +13,7 @@ public final class Settings {
     private static boolean soundOnVanish;
     private static String vanishedActionBarMessage;
 
-    private static final int confVersion = 6; // Tracking config version
+    private static final int confVersion = 7; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -54,7 +54,6 @@ public final class Settings {
         if (ver != Settings.confVersion) {
             plugin.getLogger().info("Attempting to update your configuration. Check to make sure it's ok");
             if (ver < 1) {
-                config.set("hooks.spoutcraft", config.getBoolean("spoutcraft.enable", true));
                 config.set("spoutcraft.enable", null);
                 config.set("spoutcraft", null);
             }
@@ -64,19 +63,25 @@ public final class Settings {
                 config.set("permtest", permtest);
                 config.set("enableColoration", null);
                 config.set("enableTabControl", null);
-                final boolean updates = config.getBoolean("updates.check", true);
                 config.set("updates.check", null);
-                config.set("checkupdates", updates);
             }
             if ((ver <= 3)) {
                 config.set("effects.lightning.count", 30);
             }
             if ((ver <= 4)) {
-                config.set("colornametags", true);
             }
             if ((ver <= 5)) {
                 config.set("soundOnVanish", true);
-                config.set("vanishedactionbarmessage", "&&3&&lYou are vanished!");
+            }
+            if ((ver <= 6)) {
+                config.set("soundonvanish", null);
+                config.set("checkupdates", null);
+                config.set("updates", null);
+                config.set("colornametags", null);
+                config.set("hooks.spoutcraft", null);
+                config.set("hooks.JSONAPI", null);
+                config.set("vanishedActionBarMessage", config.getString("vanishedactionbarmessage", "&&3&&lYou are vanished!"));
+                config.set("vanishedactionbarmessage", null);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
@@ -91,7 +96,7 @@ public final class Settings {
             Settings.lightningEffectCount = 1;
         }
         Settings.soundOnVanish = config.getBoolean("soundOnVanish", true);
-        Settings.vanishedActionBarMessage = config.getString("vanishedactionbarmessage", "&&3&&lYou are vanished!").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
+        Settings.vanishedActionBarMessage = config.getString("vanishedActionBarMessage", "&&3&&lYou are vanished!").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         if (config.getBoolean("debug", false)) {
             Debuggle.itsGoTime(plugin);
         } else {

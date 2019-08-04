@@ -13,19 +13,15 @@ fakeannounce:
 hooks:
     essentials: false
     dynmap: false
-    JSONAPI: false
-    spoutcraft: false
-checkupdates: true
 permissionsupdates:
     checkonworldchange: false
 effects:
     lightning:
         count: 30
-colornametags: true
 
 permtest: false
 debug: false
 soundOnVanish: true
-vanishedactionbarmessage: '&&3&&lYou are vanished!'
+vanishedActionBarMessage: '&&3&&lYou are vanished!'
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 5
+    SeriouslyThisWillEraseYourConfig: 7
