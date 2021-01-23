@@ -28,6 +28,7 @@ public final class ListenServerPing implements Listener {
                 }
             }
         } catch (UnsupportedOperationException ex) {
+            // ignored, some implementations throw this exception on event.iterator()
         }
     }
 }
