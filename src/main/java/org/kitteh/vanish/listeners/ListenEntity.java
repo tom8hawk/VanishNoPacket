@@ -9,6 +9,7 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.raid.RaidTriggerEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.kitteh.vanish.VanishPerms;
@@ -79,6 +80,13 @@ public final class ListenEntity implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityBlockForm(EntityBlockFormEvent event) {
         if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onRaidTrigger(RaidTriggerEvent event) {
+        if (this.plugin.getManager().isVanished(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
