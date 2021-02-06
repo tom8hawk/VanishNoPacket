@@ -90,7 +90,7 @@ public final class ListenPlayerOther implements Listener {
                 event.setCancelled(true);
                 if (fake) {
                     Inventory originalInventory = inventory;
-                    inventory = this.plugin.getServer().createInventory(player, originalInventory.getSize());
+                    inventory = this.plugin.getServer().createInventory(player, ((originalInventory.getSize() + 8) / 9) * 9);
                     inventory.setContents(originalInventory.getContents());
                     this.plugin.chestFakeOpen(player.getName());
                     player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
