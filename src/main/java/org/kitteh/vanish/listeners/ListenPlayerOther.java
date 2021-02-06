@@ -2,16 +2,9 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.BrewingStand;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
-import org.bukkit.block.Dispenser;
-import org.bukkit.block.Dropper;
-import org.bukkit.block.Furnace;
-import org.bukkit.block.Hopper;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,9 +67,7 @@ public final class ListenPlayerOther implements Listener {
             switch (block.getType()) {
                 case TRAPPED_CHEST:
                 case CHEST:
-                    final Chest chest = (Chest) blockState;
-                    inventory = this.plugin.getServer().createInventory(player, chest.getInventory().getSize());
-                    inventory.setContents(chest.getInventory().getContents());
+                case BARREL:
                     fake = true;
                     break;
                 case ENDER_CHEST:
@@ -86,32 +77,20 @@ public final class ListenPlayerOther implements Listener {
                     }
                     inventory = player.getEnderChest();
                     break;
-                case DISPENSER:
-                    inventory = ((Dispenser) blockState).getInventory();
-                    break;
-                case HOPPER:
-                    inventory = ((Hopper) blockState).getInventory();
-                    break;
-                case DROPPER:
-                    inventory = ((Dropper) blockState).getInventory();
-                    break;
-                case FURNACE:
-                    inventory = ((Furnace) blockState).getInventory();
-                    break;
-                case BREWING_STAND:
-                    inventory = ((BrewingStand) blockState).getInventory();
-                    break;
-                case BARREL:
-                    inventory = ((Barrel) blockState).getInventory();
-                    break;
-               default:
+                default:
             }
-            if(inventory == null && blockState instanceof Container) {
+            if (blockState instanceof ShulkerBox) {
+                fake = true;
+            }
+            if (inventory == null && blockState instanceof Container) {
                 inventory = ((Container) blockState).getInventory();
             }
             if (inventory != null) {
                 event.setCancelled(true);
                 if (fake) {
+                    Inventory originalInventory = inventory;
+                    inventory = this.plugin.getServer().createInventory(player, originalInventory.getSize());
+                    inventory.setContents(originalInventory.getContents());
                     this.plugin.chestFakeOpen(player.getName());
                     player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
                 }
