@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
@@ -105,8 +106,8 @@ public final class ListenPlayerOther implements Listener {
                     break;
                default:
             }
-            if(inventory == null && blockState instanceof ShulkerBox) {
-                inventory = ((ShulkerBox) blockState).getInventory();
+            if(inventory == null && blockState instanceof Container) {
+                inventory = ((Container) blockState).getInventory();
             }
             if (inventory != null) {
                 event.setCancelled(true);
