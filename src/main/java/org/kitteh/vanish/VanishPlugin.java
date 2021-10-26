@@ -9,6 +9,7 @@ import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
 import org.kitteh.vanish.listeners.ListenInventory;
+import org.kitteh.vanish.listeners.ListenPaperEvents;
 import org.kitteh.vanish.listeners.ListenPlayerJoin;
 import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
@@ -200,7 +201,12 @@ public final class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
-
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            this.getServer().getPluginManager().registerEvents(new ListenPaperEvents(this), this);
+        } catch (ClassNotFoundException ignored) {
+            this.getLogger().warning("Not using Paper API, because it is not available.");
+        }
         this.getLogger().info(this.getCurrentVersion() + " loaded.");
     }
 
