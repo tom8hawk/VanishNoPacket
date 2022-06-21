@@ -6,13 +6,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockReceiveGameEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -161,16 +159,6 @@ public final class ListenPlayerOther implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent event) {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onBlockReceiveGameEvent(BlockReceiveGameEvent event) {
-        Entity trigger = event.getEntity();
-        if (trigger instanceof Player && event.getBlock().getType() == Material.SCULK_SENSOR) {
-            if (this.plugin.getManager().isVanished((Player) trigger)) {
-                event.setCancelled(true);
-            }
         }
     }
 }

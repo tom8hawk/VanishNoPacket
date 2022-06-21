@@ -7,6 +7,7 @@ import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
+import org.kitteh.vanish.listeners.Listen119;
 import org.kitteh.vanish.listeners.ListenEntity;
 import org.kitteh.vanish.listeners.ListenInventory;
 import org.kitteh.vanish.listeners.ListenPaperEvents;
@@ -15,7 +16,7 @@ import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
 import org.kitteh.vanish.listeners.ListenServerPing;
 import org.kitteh.vanish.listeners.ListenToYourHeart;
-
+import org.kitteh.vanish.utils.MinecraftVersion;
 import java.io.File;
 import java.util.HashSet;
 
@@ -206,6 +207,9 @@ public final class VanishPlugin extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new ListenPaperEvents(this), this);
         } catch (ClassNotFoundException ignored) {
             this.getLogger().warning("Not using Paper API, because it is not available.");
+        }
+        if (MinecraftVersion.isAboveOrEqual(1, 19, 0)) {
+            this.getServer().getPluginManager().registerEvents(new Listen119(this), this);
         }
         this.getLogger().info(this.getCurrentVersion() + " loaded.");
     }
