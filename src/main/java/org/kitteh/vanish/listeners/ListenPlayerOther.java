@@ -65,20 +65,15 @@ public final class ListenPlayerOther implements Listener {
             Inventory inventory = null;
             final BlockState blockState = block.getState();
             boolean fake = false;
-            switch (block.getType()) {
-                case TRAPPED_CHEST:
-                case CHEST:
-                case BARREL:
-                    fake = true;
-                    break;
-                case ENDER_CHEST:
-                    if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                    inventory = player.getEnderChest();
-                    break;
-                default:
+            Material blockType = block.getType();
+            if (blockType == Material.TRAPPED_CHEST || blockType == Material.CHEST || blockType == Material.BARREL) {
+                fake = true;
+            } else if (blockType == Material.ENDER_CHEST) {
+                if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
+                    event.setCancelled(true);
+                    return;
+                }
+                inventory = player.getEnderChest();
             }
             if (blockState instanceof ShulkerBox) {
                 fake = true;
