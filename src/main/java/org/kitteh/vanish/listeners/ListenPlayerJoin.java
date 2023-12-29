@@ -31,25 +31,29 @@ public final class ListenPlayerJoin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
-        final StringBuilder statusUpdate = new StringBuilder();
-        if (this.plugin.getManager().isVanished(event.getPlayer())) {
-            String message = ChatColor.DARK_AQUA + "You have joined vanished.";
-            if (VanishPerms.canVanish(event.getPlayer())) {
-                message += " To appear: /vanish";
-            }
-            event.getPlayer().sendMessage(message);
-            statusUpdate.append("vanished");
-        }
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
             this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
             event.setJoinMessage(null);
-            if (statusUpdate.length() != 0) {
-                statusUpdate.append(" and ");
+        }
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            final StringBuilder statusUpdate = new StringBuilder();
+            if (this.plugin.getManager().isVanished(event.getPlayer())) {
+                String message = ChatColor.DARK_AQUA + "You have joined vanished.";
+                if (VanishPerms.canVanish(event.getPlayer())) {
+                    message += " To appear: /vanish";
+                }
+                event.getPlayer().sendMessage(message);
+                statusUpdate.append("vanished");
             }
-            statusUpdate.append("silently");
-        }
-        if (statusUpdate.length() != 0) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
-        }
+            if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
+                if (statusUpdate.length() != 0) {
+                    statusUpdate.append(" and ");
+                }
+                statusUpdate.append("silently");
+            }
+            if (statusUpdate.length() != 0) {
+                this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
+            }
+        });
     }
 }
