@@ -1,10 +1,10 @@
 package org.kitteh.vanish.listeners;
 
+import java.util.HashSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Container;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,16 +21,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.utils.StringUtil;
 
 public final class ListenPlayerOther implements Listener {
     private final VanishPlugin plugin;
+    private final HashSet<Material> fakeInventoryBlockTypes;
 
     public ListenPlayerOther(VanishPlugin instance) {
         this.plugin = instance;
+        this.fakeInventoryBlockTypes = new HashSet<>();
+        // some of the materials might not exist in older minecraft versions, so order is important
+        try {
+            fakeInventoryBlockTypes.add(Material.CHEST);
+            fakeInventoryBlockTypes.add(Material.TRAPPED_CHEST);
+            fakeInventoryBlockTypes.add(Material.BARREL);
+            fakeInventoryBlockTypes.add(Material.CHISELED_BOOKSHELF);
+            fakeInventoryBlockTypes.add(Material.DECORATED_POT);
+        } catch (NoSuchFieldError ignored) {
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -57,17 +70,20 @@ public final class ListenPlayerOther implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
             final Block block = event.getClickedBlock();
-            Inventory inventory = null;
             final BlockState blockState = block.getState();
+            final Material blockType = block.getType();
             boolean fake = false;
-            Material blockType = block.getType();
-            if (blockType == Material.TRAPPED_CHEST || blockType == Material.CHEST || blockType == Material.BARREL) {
+            if (fakeInventoryBlockTypes.contains(blockType) || blockState instanceof ShulkerBox) {
                 fake = true;
+            }
+            Inventory inventory = null;
+            if (blockState instanceof BlockInventoryHolder blockInventoryHolder) {
+                inventory = blockInventoryHolder.getInventory();
             } else if (blockType == Material.ENDER_CHEST) {
                 if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
                     event.setCancelled(true);
@@ -75,17 +91,11 @@ public final class ListenPlayerOther implements Listener {
                 }
                 inventory = player.getEnderChest();
             }
-            if (blockState instanceof ShulkerBox) {
-                fake = true;
-            }
-            if (inventory == null && blockState instanceof Container) {
-                inventory = ((Container) blockState).getInventory();
-            }
             if (inventory != null) {
                 event.setCancelled(true);
                 if (fake) {
                     Inventory originalInventory = inventory;
-                    inventory = this.plugin.getServer().createInventory(player, ((originalInventory.getSize() + 8) / 9) * 9);
+                    inventory = this.plugin.getServer().createInventory(player, ((originalInventory.getSize() + 8) / 9) * 9, StringUtil.capitalizeFirstLetter(blockType.name()));
                     inventory.setContents(originalInventory.getContents());
                     this.plugin.chestFakeOpen(player.getName());
                     player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
@@ -94,7 +104,9 @@ public final class ListenPlayerOther implements Listener {
                 return;
             }
         }
-        if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
+        if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player))
+
+        {
             event.setCancelled(true);
             return;
         }
