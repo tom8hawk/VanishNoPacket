@@ -131,7 +131,7 @@ public final class VanishManager {
      * @return if the named player is currently vanished
      */
     public boolean isVanished(String playerName) {
-        final Player player = this.plugin.getServer().getPlayer(playerName);
+        final Player player = this.plugin.getServer().getPlayerExact(playerName);
         if (player != null) {
             Debuggle.log("Testing vanished status of " + player.getName() + ": " + this.isVanished(player));
             return this.isVanished(player);

@@ -49,7 +49,7 @@ public final class ListenPlayerMessages implements Listener {
                     }
                     message.append(" have ");
                 } else if ((split.length == 3) && otherTest) {
-                    final Player target = this.plugin.getServer().getPlayer(split[1]);
+                    final Player target = this.plugin.getServer().getPlayerExact(split[1]);
                     if (target == null) {
                         message.append("Cannot find player: " + ChatColor.AQUA + split[1]);
                         event.getPlayer().sendMessage(message.toString());
