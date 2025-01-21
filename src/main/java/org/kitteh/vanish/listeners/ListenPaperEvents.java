@@ -4,6 +4,10 @@ import com.destroystokyo.paper.event.entity.PhantomPreSpawnEvent;
 import com.destroystokyo.paper.event.entity.PlayerNaturallySpawnCreaturesEvent;
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
+import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
+import com.destroystokyo.paper.event.server.PaperServerListPingEvent.ListedPlayerInfo;
+import java.util.Iterator;
+import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,6 +46,18 @@ public class ListenPaperEvents implements Listener {
     public void onPhantomPreSpawn(PhantomPreSpawnEvent event) {
         if ((event.getSpawningEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getSpawningEntity())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void ping(PaperServerListPingEvent event) {
+        final Set<String> invisibles = plugin.getManager().getVanishedPlayers();
+        final Iterator<ListedPlayerInfo> players = event.getListedPlayers().iterator();
+        while (players.hasNext()) {
+            ListedPlayerInfo player = players.next();
+            if (invisibles.contains(player.name())) {
+                players.remove();
+            }
         }
     }
 }
