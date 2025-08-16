@@ -1,14 +1,19 @@
 package org.kitteh.vanish;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller of announcing joins and quits that aren't their most honest.
@@ -91,17 +96,69 @@ public final class VanishAnnounceManipulator {
 
     void fakeJoin(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
             this.playerOnlineStatus.put(player.getName(), true);
+
+            if (Settings.getUseVanillaMessages()) {
+                HoverEvent<HoverEvent.ShowEntity> showEntity = HoverEvent.showEntity(
+                        HoverEvent.ShowEntity.showEntity(
+                                Key.key("minecraft:player"),
+                                player.getUniqueId(),
+                                Component.text(player.getName())
+                        ));
+
+                Component nameWithHover = Component.text(player.getName())
+                        .hoverEvent(showEntity)
+                        .color(NamedTextColor.YELLOW);
+
+                Component joinMessage = Component.translatable(
+                        "multiplayer.player.joined",
+                        NamedTextColor.YELLOW,
+                        nameWithHover
+                );
+
+                for (Player viewer : Bukkit.getOnlinePlayers()) {
+                    viewer.sendMessage(joinMessage);
+                }
+
+                return;
+            }
+
+            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
         }
     }
 
     void fakeQuit(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
             this.playerOnlineStatus.put(player.getName(), false);
+
+            if (Settings.getUseVanillaMessages()) {
+                HoverEvent<HoverEvent.ShowEntity> showEntity = HoverEvent.showEntity(
+                        HoverEvent.ShowEntity.showEntity(
+                                Key.key("minecraft:player"),
+                                player.getUniqueId(),
+                                Component.text(player.getName())
+                        ));
+
+                Component nameWithHover = Component.text(player.getName())
+                        .hoverEvent(showEntity)
+                        .color(NamedTextColor.YELLOW);
+
+                Component joinMessage = Component.translatable(
+                        "multiplayer.player.left",
+                        NamedTextColor.YELLOW,
+                        nameWithHover
+                );
+
+                for (Player viewer : Bukkit.getOnlinePlayers()) {
+                    viewer.sendMessage(joinMessage);
+                }
+
+                return;
+            }
+
+            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
         }
     }
 

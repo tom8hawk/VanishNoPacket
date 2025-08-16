@@ -8,6 +8,7 @@ public final class Settings {
     private static String fakeQuit;
     private static String fakeJoin;
     private static boolean autoFakeJoinSilent;
+    private static boolean useVanillaMessages;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
     private static boolean soundOnVanish;
@@ -17,6 +18,10 @@ public final class Settings {
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
+    }
+
+    public static boolean getUseVanillaMessages() {
+        return Settings.useVanillaMessages;
     }
 
     public static boolean getEnablePermTest() {
@@ -90,6 +95,7 @@ public final class Settings {
         Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
+        Settings.useVanillaMessages = config.getBoolean("fakeannounce.vanillamessages", true);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {

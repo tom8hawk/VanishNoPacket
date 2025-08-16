@@ -8,6 +8,7 @@
 #
 fakeannounce:
     automaticforsilentjoin: false
+    vanillamessages: true
     join: '%p joined the game.'
     quit: '%p left the game.'
 hooks:
