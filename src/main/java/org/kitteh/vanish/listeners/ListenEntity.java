@@ -3,12 +3,11 @@ package org.kitteh.vanish.listeners;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.EntityBlockFormEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.raid.RaidTriggerEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
@@ -54,9 +53,22 @@ public final class ListenEntity implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityTarget(EntityTargetEvent event) {
-        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
+    public void onEntityTarget(EntityTargetLivingEntityEvent event) {
+        if (event.getTarget() instanceof Player && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
             event.setCancelled(true);
+            event.setTarget(null);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityTeleport(EntityTeleportEvent event) {
+        if (event.getEntity() instanceof Tameable tameable) {
+            if (tameable.isTamed() && tameable.getOwner() instanceof Player) {
+                Player owner = (Player) tameable.getOwner();
+                if (this.plugin.getManager().isVanished(owner) && VanishPerms.canNotFollow(owner)) {
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 

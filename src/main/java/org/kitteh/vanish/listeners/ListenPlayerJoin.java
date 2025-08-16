@@ -32,7 +32,6 @@ public final class ListenPlayerJoin implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
-            this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
             event.setJoinMessage(null);
         }
         plugin.getServer().getScheduler().runTask(plugin, () -> {

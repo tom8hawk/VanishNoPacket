@@ -10,9 +10,7 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,31 +20,12 @@ import java.util.Map;
  * particularly stupid.
  */
 public final class VanishAnnounceManipulator {
-    private final List<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final Map<String, Boolean> playerOnlineStatus;
 
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.playerOnlineStatus = new HashMap<String, Boolean>();
-        this.delayedAnnouncePlayerList = new ArrayList<String>();
-    }
-
-    public void addToDelayedAnnounce(String player) {
-        this.playerOnlineStatus.put(player, false);
-        if (!Settings.getAutoFakeJoinSilent()) {
-            return;
-        }
-        this.delayedAnnouncePlayerList.add(player);
-    }
-
-    /**
-     * Removes a player's delayed announce
-     *
-     * @param player name of the player
-     */
-    public void dropDelayedAnnounce(String player) {
-        this.delayedAnnouncePlayerList.remove(player);
+        this.playerOnlineStatus = new HashMap<>();
     }
 
     /**
@@ -162,11 +141,4 @@ public final class VanishAnnounceManipulator {
         }
     }
 
-    void vanishToggled(Player player) {
-        if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
-            return;
-        }
-        this.fakeJoin(player, false);
-        this.dropDelayedAnnounce(player.getName());
-    }
 }

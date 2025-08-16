@@ -7,7 +7,7 @@
 #  http://dev.bukkit.org/server-mods/vanish/pages/configuration/
 #
 fakeannounce:
-    automaticforsilentjoin: false
+    autofakemessages: false
     vanillamessages: true
     join: '%p joined the game.'
     quit: '%p left the game.'

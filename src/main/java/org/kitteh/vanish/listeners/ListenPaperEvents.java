@@ -52,12 +52,6 @@ public class ListenPaperEvents implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void ping(PaperServerListPingEvent event) {
         final Set<String> invisibles = plugin.getManager().getVanishedPlayers();
-        final Iterator<ListedPlayerInfo> players = event.getListedPlayers().iterator();
-        while (players.hasNext()) {
-            ListedPlayerInfo player = players.next();
-            if (invisibles.contains(player.name())) {
-                players.remove();
-            }
-        }
+        event.getListedPlayers().removeIf(player -> invisibles.contains(player.name()));
     }
 }

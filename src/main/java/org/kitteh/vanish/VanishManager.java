@@ -199,6 +199,19 @@ public final class VanishManager {
      * @param togglingPlayer the player disappearing
      */
     public void toggleVanish(Player togglingPlayer) {
+        toggleVanish(togglingPlayer, false);
+    }
+
+    /**
+     * Toggles a player's visibility
+     * Called when a player calls /vanish
+     * Talks to the player and everyone with vanish.see
+     * Will trigger effects
+     *
+     * @param togglingPlayer the player disappearing
+     * @param sendFakeAnnounce send a fake announcement of a player entering or leaving?
+     */
+    public void toggleVanish(Player togglingPlayer, boolean sendFakeAnnounce) {
         this.toggleVanishQuiet(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
         final String messageBit;
@@ -208,11 +221,17 @@ public final class VanishManager {
             this.plugin.hooksVanish(togglingPlayer);
             messageBit = "vanished. Poof.";
 
+            if (sendFakeAnnounce) {
+                this.announceManipulator.fakeQuit(togglingPlayer, false);
+            }
         } else {
             Debuggle.log("LoudVanishToggle Revealing " + togglingPlayer.getName());
             this.plugin.hooksUnvanish(togglingPlayer);
             messageBit = "become visible.";
-            this.announceManipulator.vanishToggled(togglingPlayer);
+
+            if (sendFakeAnnounce) {
+                this.announceManipulator.fakeJoin(togglingPlayer, false);
+            }
         }
         final String message = base + messageBit;
         togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);

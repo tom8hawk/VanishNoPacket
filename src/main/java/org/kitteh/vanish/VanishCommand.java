@@ -40,7 +40,8 @@ public final class VanishCommand implements CommandExecutor {
         if (args.length == 0) {
             if (sender instanceof Player) {
                 if (VanishPerms.canVanish((Player) sender)) {
-                    this.plugin.getManager().toggleVanish((Player) sender);
+                    boolean sendFakeAnnounce = Settings.getAutoFakeMessages() && VanishPerms.canFakeAnnounce((Player) sender);
+                    this.plugin.getManager().toggleVanish((Player) sender, sendFakeAnnounce);
                 } else {
                     this.denied(sender);
                 }
@@ -181,7 +182,7 @@ public final class VanishCommand implements CommandExecutor {
                 return true;
             }
             if (!this.plugin.getManager().isVanished(player)) {
-                this.plugin.getManager().toggleVanish(player);
+                this.plugin.getManager().toggleVanish(player, false);
                 // Fake announce as well?
                 if ((args.length > 1) && args[1].equalsIgnoreCase("fake") && VanishPerms.canFakeAnnounce(player)) {
                     this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, false);
@@ -195,7 +196,7 @@ public final class VanishCommand implements CommandExecutor {
                 return true;
             }
             if (this.plugin.getManager().isVanished(player)) {
-                this.plugin.getManager().toggleVanish(player);
+                this.plugin.getManager().toggleVanish(player, false);
                 // Fake announce as well?
                 if ((args.length > 1) && args[1].equalsIgnoreCase("fake") && VanishPerms.canFakeAnnounce(player)) {
                     this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, false);
@@ -215,7 +216,7 @@ public final class VanishCommand implements CommandExecutor {
         if ((goal.equalsIgnoreCase("fakequit") || goal.equalsIgnoreCase("fq"))) {
             if (VanishPerms.canFakeAnnounce(player)) {
                 if (!this.plugin.getManager().isVanished(player)) {
-                    this.plugin.getManager().toggleVanish(player);
+                    this.plugin.getManager().toggleVanish(player, false);
                 } else {
                     player.sendMessage(ChatColor.RED + "Already invisible :)");
                 }
@@ -232,7 +233,7 @@ public final class VanishCommand implements CommandExecutor {
         if ((goal.equalsIgnoreCase("fakejoin") || goal.equalsIgnoreCase("fj"))) {
             if (VanishPerms.canFakeAnnounce(player)) {
                 if (this.plugin.getManager().isVanished(player)) {
-                    this.plugin.getManager().toggleVanish(player);
+                    this.plugin.getManager().toggleVanish(player, false);
                 } else {
                     player.sendMessage(ChatColor.RED + "Already visible :)");
                 }
